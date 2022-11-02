@@ -1,0 +1,75 @@
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+namespace _2ndProject;
+
+public partial class Form1 : Form
+{
+    public Form1()
+    {
+        InitializeComponent();
+        g = panel1.CreateGraphics();
+    }
+    Graphics g;
+    bool paint= false;
+    int? startx = null;// Απο που θα αρχιζει
+    int? starty = null;
+    bool usepaintb = false;
+    bool usepencil=false;
+    
+
+
+    private void colorpicker_Click(object sender, EventArgs e)
+    {
+        colorDialog1.ShowDialog();
+        urcolor.BackColor = colorDialog1.Color;
+
+    }
+
+    private void panel1_MouseMove(object sender, MouseEventArgs e)
+    {
+        if (paint) {
+            if (usepaintb) {
+                Pen paintbrush = new Pen(urcolor.BackColor, 5.0F);
+                g.DrawLine(paintbrush, new Point(startx ?? e.X, starty ?? e.Y), new Point(e.X, e.Y));
+                startx = e.X;
+                starty = e.Y;   
+
+
+            }
+            if (usepencil) {
+                Pen pencil = new Pen(urcolor.BackColor, 2.0F);
+                g.DrawLine(pencil, new Point(startx ?? e.X, starty ?? e.Y), new Point(e.X, e.Y)); ;
+                startx = e.X;
+                starty = e.Y;
+            }
+        }
+
+
+    }
+
+    private void panel1_MouseDown(object sender, MouseEventArgs e)
+    {
+        paint = true;
+     }
+
+    private void panel1_MouseUp(object sender, MouseEventArgs e)
+    {
+        paint = false;
+        startx = null;
+        starty = null;
+    }
+
+    private void brush_Click(object sender, EventArgs e)
+    {
+        usepaintb = true;
+        usepencil = false;
+    }
+
+    private void pencil_Click(object sender, EventArgs e)
+    {
+        usepencil = true;
+        usepaintb = false;
+        
+    }
+}
